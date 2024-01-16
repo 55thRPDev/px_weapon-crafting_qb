@@ -7,19 +7,19 @@ Crafting = {
     XpSystem = false,
     ExperiancePerCraft = 2.5,
     Weapon = {
-        ["w_pi_pistol_mk2"] = {
-            weaponCode = 'WEAPON_PISTOL_MK2',
-            weaponName = 'Pistol MK2',
-            requiredJob = false,
-            requiredXp = 10,
-            allowlistJob = {
-                "police"
-            },
-            ItemRequired = {
-                {label = 'Phone', itemName = "phone", quantity = 2},
-                {label = 'Burger', itemName = "burger", quantity = 5}
-            }
-        },
+        -- ["w_pi_pistol_mk2"] = {
+        --     weaponCode = 'WEAPON_PISTOL_MK2',
+        --     weaponName = 'Pistol MK2',
+        --     requiredJob = false,
+        --     requiredXp = 10,
+        --     allowlistJob = {
+        --         "police"
+        --     },
+        --     ItemRequired = {
+        --         {label = 'Phone', itemName = "phone", quantity = 2},
+        --         {label = 'Burger', itemName = "burger", quantity = 5}
+        --     }
+        -- },
         ["w_pi_pistol"] = {
             weaponCode = 'WEAPON_PISTOL',
             weaponName = 'Pistol',
@@ -36,7 +36,7 @@ Crafting = {
             weaponCode = 'WEAPON_CARBINERIFLE',
             weaponName = 'Carabine Rifle',
             requiredJob = true,
-            requiredXp = 1,
+            requiredXp = 0,
             allowlistJob = {
                 "police",
             },

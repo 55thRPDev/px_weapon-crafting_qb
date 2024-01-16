@@ -1,4 +1,5 @@
 QBCore = exports['qb-core']:GetCoreObject()
+
 lib.callback.register('px_crafting:getItemCount', function(source, item)
     local src = source
     local Player = QBCore.Functions.GetPlayer(src)

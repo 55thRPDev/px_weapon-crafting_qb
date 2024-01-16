@@ -20,17 +20,22 @@ function GetJobPlayer()
 end
 
 function GetPlayerXp()
-    local player_xp = MySQL.scalar.await('SELECT `crafting_level` FROM `players` WHERE `identifier` = ?', {
-        cache.playerId
+	local src = source
+    local Player = QBCore.Functions.GetPlayer(src)
+    local player_xp = MySQL.scalar.await('SELECT `crafting_level` FROM `players` WHERE `citizenid` = ?', {
+        Player.PlayerData.citizenid
     })
     return player_xp
 end
 
 function GivePlayerXp(source, xp)
+    local src = source
+    local Player = QBCore.Functions.GetPlayer(src)
+
     local getPlayerXp = GetPlayerXp()
     local total_xp = getPlayerXp + xp
-    local affectedRows = MySQL.update.await('UPDATE players SET `crafting_level` = ? WHERE identifier = ?', {
-        total_xp, cache.playerId
+    local affectedRows = MySQL.update.await('UPDATE players SET `crafting_level` = ? WHERE citizenid = ?', {
+        total_xp, Player.PlayerData.citizenid
     })
     TriggerClientEvent('ox_lib:notify', source, {
         type = 'success',
