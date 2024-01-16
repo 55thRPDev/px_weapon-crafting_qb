@@ -6,6 +6,18 @@ Simple weapon crafting system with XP system and job control<br><br>
 <p><img align="right" src="https://cdn.discordapp.com/attachments/869944683235794954/1196241862055432262/PX_1920-100.jpg?ex=65b6ea0d&is=65a4750d&hm=117ae31ad94ded1e2e76c3c84dbaded7f7c2c796a0ff92f9bc679fb8993b6d08&" alt="px-development" /></p>
 
 
+Installation:
+
+Run this SQL on DB
+```
+ALTER TABLE Players
+ADD COLUMN crafting_level INTEGER NOT NULL;
+```
+
+Adjust config to your liking
+
+ensure the resource.   Further docs available from original creator down below
+
 # **Frameworks**
 - QB Core <br><br>
 # **Features**
