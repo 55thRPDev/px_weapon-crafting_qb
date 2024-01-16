@@ -1,14 +1,12 @@
-RegisterNetEvent('esx:playerLoaded')
-AddEventHandler('esx:playerLoaded', function(xPlayer)
-	ESX.PlayerData = xPlayer
+RegisterNetEvent('QBCore:Client:OnPlayerLoaded', function(xPlayer)
+	PlayerData = QBCore.Functions.GetPlayerData()
 end)
 
-RegisterNetEvent('esx:setJob')
-AddEventHandler('esx:setJob', function (job)
-    ESX.PlayerData.job = job
+RegisterNetEvent('QBCore:Client:OnJobUpdate', function (job)
+    PlayerData.job = job
 end)
 
-AddEventHandler('esx:onPlayerSpawn', function()
+AddEventHandler('QBCore:Client:OnPlayerLoaded', function()
     SpawnObject()
 end)
 
@@ -30,11 +28,10 @@ exports.ox_target:addModel(Crafting.PropBench, {
 })
 
 AddEventHandler('onResourceStart', function(resourceName)
-    if GetCurrentResourceName() ~= resourceName then
-        return
+    -- handles script restarts
+    if GetCurrentResourceName() == resourceName then
+        SpawnObject()
     end
-
-    SpawnObject()
 end)
 
 function SpawnObject()

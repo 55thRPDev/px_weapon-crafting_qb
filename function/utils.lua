@@ -20,7 +20,7 @@ function GetJobPlayer()
 end
 
 function GetPlayerXp()
-    local player_xp = MySQL.scalar.await('SELECT `crafting_level` FROM `users` WHERE `identifier` = ?', {
+    local player_xp = MySQL.scalar.await('SELECT `crafting_level` FROM `players` WHERE `identifier` = ?', {
         cache.playerId
     })
     return player_xp
@@ -29,7 +29,7 @@ end
 function GivePlayerXp(source, xp)
     local getPlayerXp = GetPlayerXp()
     local total_xp = getPlayerXp + xp
-    local affectedRows = MySQL.update.await('UPDATE users SET `crafting_level` = ? WHERE identifier = ?', {
+    local affectedRows = MySQL.update.await('UPDATE players SET `crafting_level` = ? WHERE identifier = ?', {
         total_xp, cache.playerId
     })
     TriggerClientEvent('ox_lib:notify', source, {
