@@ -4,10 +4,6 @@ RegisterNetEvent('QBCore:Client:OnPlayerLoaded', function(xPlayer)
 	PlayerData = QBCore.Functions.GetPlayerData()
 end)
 
-RegisterNetEvent('QBCore:Client:OnJobUpdate', function (job)
-    PlayerData.job = job
-end)
-
 AddEventHandler('QBCore:Client:OnPlayerLoaded', function()
     SpawnObject()
 end)
