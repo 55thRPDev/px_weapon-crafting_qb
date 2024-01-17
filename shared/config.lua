@@ -27,12 +27,15 @@ Crafting = {
             itemCode = 'WEAPON_PISTOL',
             itemName = 'Pistol',
             requiredJob = false,
-            requiredGang = false,
+            requiredGang = true,
             requiredXp = 0,
             requiredTime = 2000,
             weapon = true,
             allowlistJob = {
                 "police"
+            },
+            allowlistGang = {
+                'bloods'
             },
             ItemRequired = {
                 {label = 'Radio', itemName = "radio", quantity = 1}
