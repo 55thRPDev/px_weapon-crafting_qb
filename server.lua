@@ -1,5 +1,3 @@
-QBCore = exports['qb-core']:GetCoreObject()
-
 lib.callback.register('px_crafting:getItemCount', function(source, item)
     local src = source
     local Player = QBCore.Functions.GetPlayer(src)
@@ -43,6 +41,32 @@ AddEventHandler('px_crafting:removeItem', function(item, weapon)
         GivePlayerXp(source, Crafting.ExperiancePerCraft)
     else
         exports.ox_inventory:AddItem(source, weapon, 1, nil, nil)
+    end
+end)
+
+RegisterNetEvent('px_crafting:SaveTable')
+AddEventHandler('px_crafting:SaveTable', function(name, coordsx, coordsy, coordsz, heading)
+    local loadFile= LoadResourceFile(GetCurrentResourceName(), "./positionTable.json")
+    if loadFile ~= nil then
+        local extract = json.decode(loadFile)
+        if type(extract) == "table" then
+            debug(extract)
+            table.insert(extract, {name = name, coords = vector3(coordsx, coordsy, coordsz), heading = heading})
+            SaveResourceFile(GetCurrentResourceName(), "positionTable.json",  json.encode(extract, { indent = true }), -1)
+        else
+            local Table = {}
+            table.insert(Table, {name = name, coords = vector3(coordsx, coordsy, coordsz), heading = heading})
+            SaveResourceFile(GetCurrentResourceName(), "positionTable.json",  json.encode(Table, { indent = true }), -1)
+        end
+    end
+end)
+
+
+lib.callback.register('px_crafting:getTablePosition', function(source)
+    local loadFile= LoadResourceFile(GetCurrentResourceName(), "./positionTable.json")
+    if loadFile ~= nil then
+        local extract = json.decode(loadFile)
+        return extract
     end
 end)
 

@@ -30,24 +30,28 @@ exports.ox_target:addModel(Crafting.PropBench, {
 })
 
 AddEventHandler('onResourceStart', function(resourceName)
-    -- handles script restarts
-    if GetCurrentResourceName() == resourceName then
-        SpawnObject()
+    if GetCurrentResourceName() ~= resourceName then
+        return
     end
+
+    SpawnObject()
 end)
 
 function SpawnObject()
-    for _, v in ipairs(Crafting.PositionCrafting) do
-        local heading = 0.0 + v.heading
-        local createCrafting = CreateObject(Crafting.PropBench, v.coords.x, v.coords.y, v.coords.z, false, true, false)
+    local data = lib.callback.await('px_crafting:getTablePosition', false)
+    if data ~= nil then
+        for _, v in ipairs(data) do
+            local heading = 0.0 + v.heading
+            local createCrafting = CreateObject(Crafting.PropBench, v.coords.x, v.coords.y, v.coords.z, false, true, false)
 
-        if createCrafting then
-            SetEntityHeading(createCrafting, heading)
-            SetEntityCollision(createCrafting, true, true)
-            PlaceObjectOnGroundProperly(createCrafting)
-            table.insert(objectPosition, createCrafting)
-        else
-            debug('Error during the creation of the crafting object.')
+            if createCrafting then
+                SetEntityHeading(createCrafting, heading)
+                SetEntityCollision(createCrafting, true, true)
+                PlaceObjectOnGroundProperly(createCrafting)
+                table.insert(objectPosition, createCrafting)
+            else
+                debug('Error during the creation of the crafting object.')
+            end
         end
     end
 end
@@ -80,8 +84,8 @@ function OpenCrafting(coords, heading)
                     debug('Check')
                     Wait(50)
                     local option = {
-                        label = v.weaponName,
-                        args = { value = k, code = v.weaponCode },
+                        label = v.itemName,
+                        args = { value = k, code = v.itemCode },
                         close = true,
                         icon = "fa-solid fa-gun",
                         iconColor = '#0061A2'
@@ -110,12 +114,12 @@ function OpenCrafting(coords, heading)
                     value = true
                 end
             end
-          else
+        else
             debug(v)
             Wait(50)
             local option = {
-                label = v.weaponName,
-                args = { value = k, code = v.weaponCode },
+                label = v.itemName,
+                args = { value = k, code = v.itemCode },
                 close = true,
                 icon = "fa-solid fa-gun",
                 iconColor = '#5C7CFA'
@@ -207,10 +211,23 @@ function CreaArma(hash, coords, d, code, value)
 end
 
 function OpenMenuWeapon(hash, value)
-    local options = {
-        { label = lang.menu2_options_1, close = true, icon = "fa-solid fa-hammer"},
-        { label = lang.menu2_options_2, close = true, icon = "fa-solid fa-circle-info"},
-    }
+    local options = {}
+    debug("Code "..hash)
+    for k,v in pairs(Crafting.Weapon) do
+        -- debug(v)
+        if v.itemCode == hash then
+            if v.weapon then
+                options = {
+                    {label = lang.menu2_options_1, close = true, icon = "fa-solid fa-hammer"},
+                    {label = lang.menu2_options_2, close = true, icon = "fa-solid fa-circle-info"}
+                }
+            else
+                options = {
+                    {label = lang.menu2_options_1, close = true, icon = "fa-solid fa-hammer"}
+                }
+            end
+        end
+    end
     Wait(100)
     lib.registerMenu({
         id = 'OpenMenuInfo',
@@ -236,8 +253,9 @@ function OpenMenuCraft(hash, value)
     local craftingInfo = {}
     for k, v in pairs(Crafting.Weapon) do
         if k == value then
-            weaponName = v.weaponCode
+            itemName = v.itemCode
             xp = v.requiredXp
+            time = v.requiredTime
             if Crafting.XpSystem then
                 options[#options + 1] = {
                     label = lang.menu3_options_3.." "..xp,
@@ -292,14 +310,14 @@ function OpenMenuCraft(hash, value)
         if selected == totalOptions then
             local data = lib.callback.await('px_crafting:getItemCount', false, args.craftingInfo)
             local item = args.craftingInfo
-            debug(data)
             debug('Start check item and xp...')
+            debug(data)
             if data.value then
                 if Crafting.XpSystem then
                     if data.xp >= xp then
                         debug('Start Crafting')
                         if lib.progressBar({
-                                duration = 2000,
+                                duration = time,
                                 label = 'Creating',
                                 useWhileDead = false,
                                 canCancel = true,
@@ -312,7 +330,7 @@ function OpenMenuCraft(hash, value)
                                 },
                             }) then
                                 CamOFF()
-                                TriggerServerEvent('px_crafting:removeItem', item, weaponName)
+                                TriggerServerEvent('px_crafting:removeItem', item, itemName)
                             end
                     else
                         debug('You don\'t have enough experience points')
@@ -327,7 +345,7 @@ function OpenMenuCraft(hash, value)
                 else
                     debug('Start Crafting')
                     if lib.progressBar({
-                            duration = 2000,
+                            duration = time,
                             label = 'Creating',
                             useWhileDead = false,
                             canCancel = true,
@@ -340,7 +358,7 @@ function OpenMenuCraft(hash, value)
                             },
                         }) then
                             CamOFF()
-                            TriggerServerEvent('px_crafting:removeItem', item, weaponName)
+                            TriggerServerEvent('px_crafting:removeItem', item, itemName)
                         end
                 end
             else
@@ -452,6 +470,21 @@ function InfoPlaceCrafting()
     PushScaleformMovieMethodParameterString("~INPUT_PICKUP~");
     PushScaleformMovieMethodParameterString("Place Prop");
     EndScaleformMovieMethod();
+
+    --Rotate Left
+    BeginScaleformMovieMethod(Scale, "SET_DATA_SLOT");
+    ScaleformMovieMethodAddParamInt(1);
+    PushScaleformMovieMethodParameterString("~INPUT_WEAPON_WHEEL_PREV~");
+    PushScaleformMovieMethodParameterString("Rotate Right");
+    EndScaleformMovieMethod();
+
+    --Rotate Right
+    BeginScaleformMovieMethod(Scale, "SET_DATA_SLOT");
+    ScaleformMovieMethodAddParamInt(2);
+    PushScaleformMovieMethodParameterString("~INPUT_WEAPON_WHEEL_NEXT~");
+    PushScaleformMovieMethodParameterString("Rotate Left");
+    EndScaleformMovieMethod();
+
 
     BeginScaleformMovieMethod(Scale, "DRAW_INSTRUCTIONAL_BUTTONS");
     ScaleformMovieMethodAddParamInt(0);
@@ -572,15 +605,18 @@ local function placeProp(prop)
             SetEntityHeading(propObject, heading)
 
             if IsControlJustPressed(0, 38) then -- "E"
-                confirmed = true
-                lib.setClipboard('{coords = vector3('..coords.x..", "..coords.y..", "..coords.z..'), heading ='..heading..'}')
-                DeleteObject(propObject)
-                lib.notify({
-                    title = lang.notify_copy_coords,
-                    description = '',
-                    type = 'success',
-                    position = 'top-center'
-                })
+                local input = lib.inputDialog('Table Name', {''})
+
+                if not input then
+                    DeleteObject(propObject)
+                    return
+                else
+                    confirmed = true
+                    SetEntityAlpha(propObject, 255, false)
+                    SetEntityCollision(propObject, true, true)
+                    TriggerServerEvent('px_crafting:SaveTable', input[1], coords.x, coords.y, coords.z, heading)
+                    table.insert(objectPosition, propObject)
+                end
             end
         end
     end)
