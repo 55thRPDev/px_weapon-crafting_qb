@@ -1,8 +1,15 @@
 # PX WEAPON CRAFTING
+Original Script by Pixel-Scripts
+
+Modified to work with QB-Core Framework by Quake
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/T6T8KZZF4)
+
+
+
 Simple weapon crafting system with XP system and job control<br><br>
 <p><img align="right" src="https://cdn.discordapp.com/attachments/869944683235794954/1196241862055432262/PX_1920-100.jpg?ex=65b6ea0d&is=65a4750d&hm=117ae31ad94ded1e2e76c3c84dbaded7f7c2c796a0ff92f9bc679fb8993b6d08&" alt="px-development" /></p>
 
-[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/T6T8KZZF4)
+
 
 Installation:
 
