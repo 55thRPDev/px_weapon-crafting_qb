@@ -19,6 +19,13 @@ function GetJobPlayer()
     return name
 end
 
+
+function GetGangPlayer()
+    local playerInfo = QBCore.Functions.GetPlayerData()
+    local name = playerInfo.gang.name
+    return name
+end
+
 function GetPlayerXp()
 	local src = source
     local Player = QBCore.Functions.GetPlayer(src)

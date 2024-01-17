@@ -1,3 +1,5 @@
+QBCore = exports['qb-core']:GetCoreObject()
+
 RegisterNetEvent('QBCore:Client:OnPlayerLoaded', function(xPlayer)
 	PlayerData = QBCore.Functions.GetPlayerData()
 end)
@@ -62,6 +64,7 @@ end)
 function OpenCrafting(coords, heading)
     local options = {}
     local PlayerJob = GetJobPlayer()
+    local PlayerGang = GetGangPlayer()
     local value = false
 
     debug(PlayerJob)
@@ -88,7 +91,26 @@ function OpenCrafting(coords, heading)
                     value = true
                 end
             end
-        else
+        elseif v.requiredGang then
+            for _, data in pairs(v.allowlistGang) do
+                debug('For Gang ' .. data)
+
+                if data == PlayerGang then
+                    debug('Check')
+                    Wait(50)
+                    local option = {
+                        label = v.weaponName,
+                        args = { value = k, code = v.weaponCode },
+                        close = true,
+                        icon = "fa-solid fa-gun",
+                        iconColor = '#0061A2'
+                    }
+
+                    table.insert(options, option)
+                    value = true
+                end
+            end
+          else
             debug(v)
             Wait(50)
             local option = {

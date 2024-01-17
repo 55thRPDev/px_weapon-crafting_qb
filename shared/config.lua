@@ -23,18 +23,22 @@ Crafting = {
         ["w_pi_pistol"] = {
             weaponCode = 'WEAPON_PISTOL',
             weaponName = 'Pistol',
-            requiredJob = true,
+            requiredJob = false,
+            requiredGang = true,
             requiredXp = 0,
             allowlistJob = {
                 "police"
             },
+            allowlistGang = {
+                "crips"
+            },
             ItemRequired = {
-                {label = 'Radio', itemName = "radio", quantity = 1}
+                {label = 'Metal Scrap', itemName = "metalscrap", quantity = 5}
             }
         },
         ["w_ar_carbinerifle"] = {
-            weaponCode = 'WEAPON_CARBINERIFLE',
-            weaponName = 'Carabine Rifle',
+            weaponCode = 'WEAPON_SWITCHBLADE',
+            weaponName = 'Switch Blade',
             requiredJob = true,
             requiredXp = 0,
             allowlistJob = {
