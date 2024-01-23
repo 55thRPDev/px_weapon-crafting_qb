@@ -24,7 +24,7 @@ Adjust config to your liking
 ensure the resource.   Further docs available from original creator down below
 
 # **Frameworks**
-- ESX<br><br>
+- QB Core <br><br>
 # **Features**
 - EnableDebug: A boolean flag indicating whether debugging is enabled for the crafting system<br>
 - XpSystem: A boolean flag indicating activate the experience system for crafting weapons<br>
