@@ -1,14 +1,16 @@
-RegisterNetEvent('esx:playerLoaded')
-AddEventHandler('esx:playerLoaded', function(xPlayer)
-    ESX.PlayerData = xPlayer
+QBCore = exports['qb-core']:GetCoreObject()
+
+
+RegisterNetEvent('QBCore:Client:OnPlayerLoaded', function()
+	PlayerData = QBCore.Functions.GetPlayerData()
 end)
 
-RegisterNetEvent('esx:setJob')
-AddEventHandler('esx:setJob', function(job)
-    ESX.PlayerData.job = job
+RegisterNetEvent('QBCore:Client:OnJobUpdate')
+AddEventHandler('QBCore:Client:OnJobUpdate', function(job)
+    PlayerData.job = job
 end)
 
-AddEventHandler('esx:onPlayerSpawn', function()
+AddEventHandler('QBCore:Client:OnPlayerLoaded', function()
     SpawnObject()
 end)
 
@@ -145,6 +147,7 @@ end)
 function OpenCrafting(coords, heading)
     local options = {}
     local PlayerJob = GetJobPlayer()
+    local PlayerGang = GetGangPlayer()
     local value = false
 
     debug(PlayerJob)
@@ -162,6 +165,25 @@ function OpenCrafting(coords, heading)
                     local option = {
                         label = v.itemName,
                         args = { value = k, code = v.itemCode },
+                        close = true,
+                        icon = "fa-solid fa-gun",
+                        iconColor = '#0061A2'
+                    }
+
+                    table.insert(options, option)
+                    value = true
+                end
+            end
+        elseif v.requiredGang then
+            for _, data in pairs(v.allowlistGang) do
+                debug('For Gang ' .. data)
+
+                if data == PlayerGang then
+                    debug('Check')
+                    Wait(50)
+                    local option = {
+                        label = v.weaponName,
+                        args = { value = k, code = v.weaponCode },
                         close = true,
                         icon = "fa-solid fa-gun",
                         iconColor = '#0061A2'

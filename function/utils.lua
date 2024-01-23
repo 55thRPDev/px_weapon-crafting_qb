@@ -1,3 +1,6 @@
+QBCore = exports['qb-core']:GetCoreObject()
+
+
 function debug(...)
     if Crafting.EnableDebug then
         local args = { ... }
@@ -12,14 +15,23 @@ function debug(...)
 end
 
 function GetJobPlayer()
-    return ESX.PlayerData.job.name
+    local playerInfo = QBCore.Functions.GetPlayerData()
+    local name = playerInfo.job.name
+    return name
+end
+
+
+function GetGangPlayer()
+    local playerInfo = QBCore.Functions.GetPlayerData()
+    local name = playerInfo.gang.name
+    return name
 end
 
 function GetPlayerXp()
     local src = source
-    local xPlayer = ESX.GetPlayerFromId(src)
-    local player_xp = MySQL.scalar.await('SELECT `crafting_level` FROM `users` WHERE `identifier` = ?', {
-        xPlayer.identifier
+    local xPlayer = QBCore.Functions.GetPlayer(src)
+    local player_xp = MySQL.scalar.await('SELECT `crafting_level` FROM `players` WHERE `citizenid` = ?', {
+        xPlayer.PlayerData.citizenid
     })
     return player_xp
 end
