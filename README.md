@@ -1,4 +1,4 @@
-# PX WEAPON CRAFTING
+# PX WEAPON CRAFTING - QB Core Edition
 Original Script by Pixel-Scripts
 
 Modified to work with QB-Core Framework by Quake
